@@ -176,13 +176,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.9.4"
-  flashlight:
-    dependency: "direct main"
-    description:
-      name: flashlight
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.1.1"
   flushbar:
     dependency: "direct main"
     description:
