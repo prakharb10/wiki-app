@@ -15,7 +15,6 @@ import 'package:gallery_saver/gallery_saver.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:adobe_xd/adobe_xd.dart';
-import 'XDLoginPage.dart';
 import 'XDRegisterPage.dart';
 import 'RootPage.dart';
 
@@ -305,7 +304,7 @@ class _TakePictureScreenState extends State<TakePictureScreen> {
             OpenContainer(
                 closedShape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30.0)),
-                transitionDuration: Duration(milliseconds: 500),
+                transitionDuration: Duration(milliseconds: 300),
                 tappable: false,
                 closedBuilder: (context, action) {
                   return FloatingActionButton(

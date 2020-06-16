@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:animations/animations.dart';
-import './XDLoginPage.dart';
+import 'LoginPage.dart';
+import 'SharedAxisPR.dart';
 
 class RootPage extends StatelessWidget {
   RootPage({
@@ -56,7 +57,7 @@ class RootPage extends StatelessWidget {
                 ),
                   onPressed: () => Navigator.of(context).push(
                       SharedAxisPageRoute(
-                          page: XDLoginPage(),
+                          page: LoginPage(),
                           transitionType: SharedAxisTransitionType.horizontal)),
                   color: const Color(0xfff23b5f),
                   child: Row(
@@ -83,31 +84,6 @@ class RootPage extends StatelessWidget {
       ]),
     );
   }
-}
-
-class SharedAxisPageRoute extends PageRouteBuilder {
-  SharedAxisPageRoute({Widget page, SharedAxisTransitionType transitionType})
-      : super(
-          pageBuilder: (
-            BuildContext context,
-            Animation<double> primaryAnimation,
-            Animation<double> secondaryAnimation,
-          ) =>
-              page,
-          transitionsBuilder: (
-            BuildContext context,
-            Animation<double> primaryAnimation,
-            Animation<double> secondaryAnimation,
-            Widget child,
-          ) {
-            return SharedAxisTransition(
-              animation: primaryAnimation,
-              secondaryAnimation: secondaryAnimation,
-              transitionType: transitionType,
-              child: child,
-            );
-          },
-        );
 }
 
 const String _svg_ummgt8 =
