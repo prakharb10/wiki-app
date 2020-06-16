@@ -15,9 +15,9 @@ import 'package:flashlight/flashlight.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:adobe_xd/adobe_xd.dart';
-import 'XDRootPage.dart';
 import 'XDLoginPage.dart';
 import 'XDRegisterPage.dart';
+import 'RootPage.dart';
 
 List<CameraDescription> cameras;
 Future<void> main() async {
@@ -73,7 +73,7 @@ class MyApp extends StatelessWidget {
       // closer together (more dense) than on mobile platforms.
       //visualDensity: VisualDensity.adaptivePlatformDensity,
       //),
-      home: XDRootPage()//TakePictureScreen(
+      home: RootPage()//TakePictureScreen(
           // Pass the appropriate camera to the TakePictureScreen widget
           //),
     );
