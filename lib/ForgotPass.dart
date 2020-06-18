@@ -169,6 +169,7 @@ class _ForgotPassState extends State<ForgotPass> {
                             if (errorMsg == '') {
                               errorMsg = 'Email sent successfully';
                               Fluttertoast.showToast(
+                                fontSize: 15,
                                 msg: errorMsg,
                                 textColor: const Color(0xff253a4b),
                               );
