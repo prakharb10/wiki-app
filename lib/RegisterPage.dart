@@ -2,36 +2,37 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'SharedAxisPR.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:animations/animations.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'ForgotPass.dart';
-import 'RegisterPage.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
-class LoginPage extends StatefulWidget {
+class RegisterPage extends StatefulWidget {
   @override
-  _LoginPageState createState() => _LoginPageState();
+  _RegisterPageState createState() => _RegisterPageState();
 }
 
-final FirebaseAuth _auth = FirebaseAuth.instance;
+final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 
-class _LoginPageState extends State<LoginPage> {
+class _RegisterPageState extends State<RegisterPage> {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passController = TextEditingController();
+  final _nameController = TextEditingController();
   bool _isEmpty = true;
   bool _isFilled = false;
   bool _isObscured = true;
+  FocusNode _focusNodeName = FocusNode();
   FocusNode _focusNodeEmail = FocusNode();
   FocusNode _focusNodePass = FocusNode();
   String _email;
   String _password;
+  String _name;
   bool _isLoading = false;
   bool _autoValidate = false;
   String _error = '';
 
-  Widget _sufIC() {
-    if (_focusNodeEmail.hasFocus) {
+  Widget _sufIC(FocusNode focusNode) {
+    if (focusNode.hasFocus) {
       return _isEmpty
           ? null
           : IconButton(
@@ -51,34 +52,31 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
-  void _loginFunction() async {
+  void _signupFunction() async {
     if (_formKey.currentState.validate()) {
       setState(() {
         _isLoading = true;
       });
       _formKey.currentState.save();
       try {
-        AuthResult result = await _auth.signInWithEmailAndPassword(
+        AuthResult result = await _firebaseAuth.createUserWithEmailAndPassword(
             email: _email, password: _password);
-        FirebaseUser user = result.user;
-        _error = 'Welcome back,' + user.displayName + '!';
+        FirebaseUser firebaseUser = result.user;
+        UserUpdateInfo updateInfo = UserUpdateInfo();
+        updateInfo.displayName = _name;
+        firebaseUser.updateProfile(updateInfo);
+        _error = 'Hi, $_name!';
         Navigator.of(context).pushNamed('/home');
-      } on PlatformException catch (e) {
-        switch (e.code) {
+      } on PlatformException catch (err) {
+        switch (err.code) {
+          case 'ERROR_WEAK_PASSWORD':
+            _error = 'Create a stronger password';
+            break;
           case 'ERROR_INVALID_EMAIL':
             _error = 'Enter a proper email';
             break;
-          case 'ERROR_WRONG_PASSWORD':
-            _error = 'Incorrect Password';
-            break;
-          case 'ERROR_USER_NOT_FOUND':
-            _error = 'Account not found';
-            break;
-          case 'ERROR_USER_DISABLED':
-            _error = 'Account disabled';
-            break;
-          case 'ERROR_TOO_MANY_REQUESTS':
-            _error = 'Too many requests';
+          case 'ERROR_EMAIL_ALREADY_IN_USE':
+            _error = 'Account already exists';
             break;
           default:
             _error = 'Unknown error occurred';
@@ -117,12 +115,12 @@ class _LoginPageState extends State<LoginPage> {
           ),
         ),
         body: Center(
-          heightFactor: 0.75,
+          heightFactor: 1,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Text(
-                'Hello Again!',
+                'Hello There!',
                 style: GoogleFonts.openSans(
                   color: const Color(0xff253a4b),
                   fontSize: 40,
@@ -138,6 +136,69 @@ class _LoginPageState extends State<LoginPage> {
                     Padding(
                       padding:
                           const EdgeInsets.fromLTRB(20.0, 25.0, 20.0, 10.0),
+                      child: TextFormField(
+                        focusNode: _focusNodeName,
+                        controller: _nameController,
+                        validator: (value) {
+                          if (value.length < 3) {
+                            return "Name too short";
+                          } else {
+                            return null;
+                          }
+                        },
+                        obscureText: false,
+                        maxLines: 1,
+                        autovalidate: false,
+                        enableSuggestions: true,
+                        toolbarOptions:
+                            ToolbarOptions(paste: true, selectAll: true),
+                        textCapitalization: TextCapitalization.words,
+                        cursorColor: const Color(0xff253a4b),
+                        keyboardType: TextInputType.text,
+                        decoration: InputDecoration(
+                          filled: true,
+                          border: OutlineInputBorder(
+                            borderSide: BorderSide.none,
+                            borderRadius: BorderRadius.circular(25.0),
+                          ),
+                          fillColor: const Color(0x25253a4b),
+                          hintText: 'Name',
+                          prefixIcon: Icon(
+                            Icons.person_outline,
+                            color: const Color(0xfff23b5f),
+                          ),
+                          suffixIcon: _sufIC(_focusNodeName),
+                        ),
+                        textInputAction: TextInputAction.next,
+                        onFieldSubmitted: (value) => FocusScope.of(context)
+                            .requestFocus(_focusNodeEmail),
+                        onChanged: (value) {
+                          setState(() {
+                            _nameController.text.isEmpty
+                                ? _isEmpty = true
+                                : _isEmpty = false;
+                          });
+                        },
+                        onTap: () {
+                          setState(() {
+                            _nameController.text.isEmpty
+                                ? _isEmpty = true
+                                : _isEmpty = false;
+                          });
+                        },
+                        onEditingComplete: () {
+                          setState(() {
+                            _nameController.text.isEmpty
+                                ? _isEmpty = true
+                                : _isEmpty = false;
+                          });
+                        },
+                        onSaved: (newValue) => _name = newValue,
+                      ),
+                    ),
+                    Padding(
+                      padding:
+                          const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
                       child: TextFormField(
                         focusNode: _focusNodeEmail,
                         controller: _emailController,
@@ -163,7 +224,7 @@ class _LoginPageState extends State<LoginPage> {
                             Icons.email,
                             color: const Color(0xfff23b5f),
                           ),
-                          suffixIcon: _sufIC(),
+                          suffixIcon: _sufIC(_focusNodeEmail),
                         ),
                         textInputAction: TextInputAction.next,
                         onFieldSubmitted: (value) =>
@@ -256,83 +317,46 @@ class _LoginPageState extends State<LoginPage> {
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-                child: ButtonBar(
-                  alignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    FlatButton(
-                      onPressed: () =>
-                          Navigator.of(context).push(SharedAxisPageRoute(
-                        page: ForgotPass(),
-                        transitionType: SharedAxisTransitionType.horizontal,
-                      )),
-                      child: Text(
-                        'Forgot Password?',
-                        style: GoogleFonts.roboto(
-                          color: const Color(0xfff23b5f),
-                          fontSize: 20.0,
+                child: _isLoading
+                    ? CircularProgressIndicator()
+                    : RaisedButton(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 25.0,
+                          vertical: 10.0,
+                        ),
+                        elevation: 5.0,
+                        onPressed: () => _signupFunction(),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30.0)),
+                        color: const Color(0xfff23b5f),
+                        child: Text(
+                          'Register',
+                          style: GoogleFonts.roboto(
+                            color: Colors.white,
+                            fontSize: 25.0,
+                          ),
                         ),
                       ),
-                    ),
-                    _isLoading
-                        ? CircularProgressIndicator()
-                        : RaisedButton(
-                            padding: EdgeInsets.symmetric(
-                              horizontal: 18.0,
-                              vertical: 8.0,
-                            ),
-                            elevation: 5.0,
-                            onPressed: () => _loginFunction(),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(30.0)),
-                            color: const Color(0xfff23b5f),
-                            child: Text(
-                              'Login',
-                              style: GoogleFonts.roboto(
-                                color: Colors.white,
-                                fontSize: 30.0,
-                              ),
-                            ),
-                          ),
-                  ],
-                ),
-              )
-            ],
-          ),
-        ),
-        bottomSheet: Padding(
-          padding: EdgeInsets.only(
-            bottom: 15.0,
-            left: 20,
-          ),
-          child: Row(
-            children: <Widget>[
-              Text(
-                'Not a member?',
-                style: GoogleFonts.roboto(
-                  color: const Color(0xff253a4b),
-                  fontSize: 20,
-                ),
-              ),
-              FlatButton(
-                padding: EdgeInsets.zero,
-                onPressed: () =>
-                    Navigator.of(context).pushReplacement(SharedAxisPageRoute(
-                  page: RegisterPage(),
-                  transitionType: SharedAxisTransitionType.horizontal,
-                )),
-                child: Text(
-                  'Register',
-                  style: GoogleFonts.roboto(
-                    color: const Color(0xfff23b5f),
-                    fontSize: 20,
-                  ),
-                  textAlign: TextAlign.left,
-                ),
               )
             ],
           ),
         ),
       ),
     );
+  }
+}
+
+String validatePassword(String value) {
+  Pattern pattern =
+      r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$';
+  RegExp regex = new RegExp(pattern);
+  print(value);
+  if (value.isEmpty) {
+    return 'Please enter password';
+  } else {
+    if (!regex.hasMatch(value))
+      return 'Enter valid password';
+    else
+      return null;
   }
 }

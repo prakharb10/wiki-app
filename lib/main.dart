@@ -14,8 +14,6 @@ import 'package:gallery_saver/gallery_saver.dart';
 //import 'package:flashlight/flashlight.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:connectivity/connectivity.dart';
-import 'package:adobe_xd/adobe_xd.dart';
-import 'XDRegisterPage.dart';
 import 'RootPage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
