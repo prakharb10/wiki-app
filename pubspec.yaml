@@ -38,6 +38,7 @@ dependencies:
   connectivity: ^0.4.8+6
   adobe_xd: ^0.1.4
   firebase_auth: ^0.16.1
+  fluttertoast: ^4.0.1
 
 
   # The following adds the Cupertino Icons font to your application.

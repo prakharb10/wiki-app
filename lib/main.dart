@@ -482,7 +482,7 @@ displayData(String textEditingController) {
       }
       if (snapshot.connectionState == ConnectionState.waiting) {
         return LinearProgressIndicator(
-          backgroundColor: Colors.amber,
+          backgroundColor: Color(0xfff23b5f),
         );
       }
     },
