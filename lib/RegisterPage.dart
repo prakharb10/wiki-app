@@ -66,7 +66,8 @@ class _RegisterPageState extends State<RegisterPage> {
         updateInfo.displayName = _name;
         firebaseUser.updateProfile(updateInfo);
         _error = 'Hi, $_name!';
-        Navigator.of(context).pushNamed('/home');
+        Navigator.of(context).pop();
+        //Navigator.of(context).pushNamed('/home');
       } on PlatformException catch (err) {
         switch (err.code) {
           case 'ERROR_WEAK_PASSWORD':
@@ -115,9 +116,9 @@ class _RegisterPageState extends State<RegisterPage> {
           ),
         ),
         body: Center(
-          heightFactor: 1,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+          //heightFactor: 1,
+          child: Wrap(
+            alignment: WrapAlignment.center,
             children: <Widget>[
               Text(
                 'Hello There!',

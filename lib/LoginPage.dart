@@ -30,8 +30,8 @@ class _LoginPageState extends State<LoginPage> {
   bool _autoValidate = false;
   String _error = '';
 
-  Widget _sufIC() {
-    if (_focusNodeEmail.hasFocus) {
+  Widget _sufIC(FocusNode focusNode) {
+    if (focusNode.hasFocus) {
       return _isEmpty
           ? null
           : IconButton(
@@ -61,8 +61,9 @@ class _LoginPageState extends State<LoginPage> {
         AuthResult result = await _auth.signInWithEmailAndPassword(
             email: _email, password: _password);
         FirebaseUser user = result.user;
-        _error = 'Welcome back,' + user.displayName + '!';
-        Navigator.of(context).pushNamed('/home');
+        _error = 'Welcome back,' + user.displayName.toString() + '!';
+        Navigator.of(context).pop();
+        //Navigator.of(context).pushReplacementNamed('/home');
       } on PlatformException catch (e) {
         switch (e.code) {
           case 'ERROR_INVALID_EMAIL':
@@ -163,7 +164,7 @@ class _LoginPageState extends State<LoginPage> {
                             Icons.email,
                             color: const Color(0xfff23b5f),
                           ),
-                          suffixIcon: _sufIC(),
+                          suffixIcon: _sufIC(_focusNodeEmail),
                         ),
                         textInputAction: TextInputAction.next,
                         onFieldSubmitted: (value) =>
@@ -289,7 +290,7 @@ class _LoginPageState extends State<LoginPage> {
                               'Login',
                               style: GoogleFonts.roboto(
                                 color: Colors.white,
-                                fontSize: 30.0,
+                                fontSize: 25.0,
                               ),
                             ),
                           ),
