@@ -22,7 +22,7 @@ class RootPage extends StatelessWidget {
                   BorderRadius.only(bottomRight: Radius.circular(36.0))),
         ),
         Transform.translate(
-          offset: Offset(0, MediaQuery.of(context).size.height * 0.365),
+          offset: Offset(0, MediaQuery.of(context).size.height * 0.35),
           child: SvgPicture.string(
             _svg_ummgt8,
             allowDrawingOutsideViewBox: true,
@@ -51,33 +51,40 @@ class RootPage extends StatelessWidget {
                   fontWeight: FontWeight.w400,
                 ),
               ),
-              FlatButton(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30.0)
-                ),
-                  onPressed: () => Navigator.of(context).push(
-                      SharedAxisPageRoute(
-                          page: LoginPage(),
-                          transitionType: SharedAxisTransitionType.horizontal)),
-                  color: const Color(0xfff23b5f),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      Text(
-                        'Get Started',
-                        style: GoogleFonts.openSans(
-                          color: Colors.white,
-                          fontSize: 25,
-                          fontWeight: FontWeight.w600,
+              Padding(
+                padding: const EdgeInsets.only(top: 10),
+                child: FlatButton(
+                  padding: EdgeInsets.symmetric(
+                    vertical: 5.0,
+                    horizontal: 10.0,
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30.0)
+                  ),
+                    onPressed: () => Navigator.of(context).push(
+                        SharedAxisPageRoute(
+                            page: LoginPage(),
+                            transitionType: SharedAxisTransitionType.horizontal)),
+                    color: const Color(0xfff23b5f),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        Text(
+                          'Get Started',
+                          style: GoogleFonts.openSans(
+                            color: Colors.white,
+                            fontSize: 25,
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
-                      ),
-                      Icon(
-                        Icons.arrow_forward,
-                        color: Colors.white,
-                        size: 25,
-                      )
-                    ],
-                  ))
+                        Icon(
+                          Icons.arrow_forward,
+                          color: Colors.white,
+                          size: 25,
+                        )
+                      ],
+                    )),
+              )
             ],
           ),
         )

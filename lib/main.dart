@@ -243,6 +243,13 @@ class _TakePictureScreenState extends State<TakePictureScreen> {
         appBar: AppBar(
           title: Text('Wiki App'),
           actions: <Widget>[
+            IconButton(
+              icon: Icon(
+                Icons.lock_open,
+                color: const Color(0xfff23b5f),
+              ),
+              onPressed: () => FirebaseAuth.instance.signOut(),
+            ),
             OpenContainer(
               closedColor:
                   MediaQuery.platformBrightnessOf(context) == Brightness.dark
@@ -496,7 +503,7 @@ displayData(String textEditingController) {
       }
       if (snapshot.connectionState == ConnectionState.waiting) {
         return LinearProgressIndicator(
-          backgroundColor: Color(0xfff23b5f),
+          backgroundColor: const Color(0xff253a4b),
         );
       }
     },
