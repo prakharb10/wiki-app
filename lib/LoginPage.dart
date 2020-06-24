@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'SharedAxisPR.dart';
@@ -58,8 +59,9 @@ class _LoginPageState extends State<LoginPage> {
       });
       _formKey.currentState.save();
       try {
-        AuthResult result = await _auth.signInWithEmailAndPassword(
-            email: _email, password: _password);
+        AuthResult result = await _auth
+            .signInWithEmailAndPassword(email: _email, password: _password)
+            .timeout(Duration(seconds: 10));
         FirebaseUser user = result.user;
         _error = 'Welcome back,' + user.displayName.toString() + '!';
         Navigator.of(context).pop();
@@ -85,6 +87,8 @@ class _LoginPageState extends State<LoginPage> {
             _error = 'Unknown error occurred';
             break;
         }
+      } on TimeoutException catch (f) {
+        _error = f.message;
       } finally {
         Fluttertoast.showToast(
           msg: _error,

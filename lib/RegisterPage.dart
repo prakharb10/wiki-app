@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'ForgotPass.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'dart:async';
 
 class RegisterPage extends StatefulWidget {
   @override
@@ -59,8 +60,9 @@ class _RegisterPageState extends State<RegisterPage> {
       });
       _formKey.currentState.save();
       try {
-        AuthResult result = await _firebaseAuth.createUserWithEmailAndPassword(
-            email: _email, password: _password);
+        AuthResult result = await _firebaseAuth
+            .createUserWithEmailAndPassword(email: _email, password: _password)
+            .timeout(Duration(seconds: 10));
         FirebaseUser firebaseUser = result.user;
         UserUpdateInfo updateInfo = UserUpdateInfo();
         updateInfo.displayName = _name;
@@ -83,6 +85,8 @@ class _RegisterPageState extends State<RegisterPage> {
             _error = 'Unknown error occurred';
             break;
         }
+      } on TimeoutException catch (f) {
+        _error = f.message;
       } finally {
         Fluttertoast.showToast(
           msg: _error,
