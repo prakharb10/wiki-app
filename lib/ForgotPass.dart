@@ -4,6 +4,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'SharedAxisPR.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'dart:async';
 
 class ForgotPass extends StatefulWidget {
   @override
@@ -149,7 +150,9 @@ class _ForgotPassState extends State<ForgotPass> {
                             });
                             _formKey2.currentState.save();
                             try {
-                              await _auth.sendPasswordResetEmail(email: _email);
+                              await _auth
+                                  .sendPasswordResetEmail(email: _email)
+                                  .timeout(Duration(seconds: 10));
                             } on PlatformException catch (error) {
                               switch (error.code) {
                                 case 'ERROR_INVALID_EMAIL':
@@ -162,6 +165,8 @@ class _ForgotPassState extends State<ForgotPass> {
                                   errorMsg = 'Unknown error occurred';
                                   break;
                               }
+                            } on TimeoutException catch (f) {
+                              errorMsg = f.message;
                             }
                             setState(() {
                               _isLoading = false;
