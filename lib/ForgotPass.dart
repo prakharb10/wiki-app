@@ -179,6 +179,7 @@ class _ForgotPassState extends State<ForgotPass> {
                                 msg: errorMsg,
                                 textColor: const Color(0xff253a4b),
                               );
+                              errorMsg = '';
                             }
                           }
                         },
