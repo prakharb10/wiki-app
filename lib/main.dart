@@ -11,9 +11,11 @@ import 'package:image_picker/image_picker.dart';
 import 'package:firebase_ml_vision/firebase_ml_vision.dart';
 import 'package:animations/animations.dart';
 import 'package:gallery_saver/gallery_saver.dart';
-import 'package:flashlight/flashlight.dart';
+//import 'package:flashlight/flashlight.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:connectivity/connectivity.dart';
+import 'RootPage.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 List<CameraDescription> cameras;
 Future<void> main() async {
@@ -44,35 +46,47 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      navigatorKey: nav,
-      darkTheme: ThemeData.dark(),
-      theme: ThemeData(
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-        primaryColor: Color(0xff253a4b),
-        accentColor: Color(0xfff23b5f)
-      ),
-      themeMode: ThemeMode.system,
-      debugShowCheckedModeBanner: false,
-      //ThemeData(
-      // This is the theme of your application.
-      //
-      // Try running your application with "flutter run". You'll see the
-      // application has a blue toolbar. Then, without quitting the app, try
-      // changing the primarySwatch below to Colors.green and then invoke
-      // "hot reload" (press "r" in the console where you ran "flutter run",
-      // or simply save your changes to "hot reload" in a Flutter IDE).
-      // Notice that the counter didn't reset back to zero; the application
-      // is not restarted.
-      //primarySwatch: Colors.blueGrey,
-      // This makes the visual density adapt to the platform that you run
-      // the app on. For desktop platforms, the controls will be smaller and
-      // closer together (more dense) than on mobile platforms.
-      //visualDensity: VisualDensity.adaptivePlatformDensity,
-      //),
-      home: TakePictureScreen(
-          // Pass the appropriate camera to the TakePictureScreen widget
-          ),
-    );
+        navigatorKey: nav,
+        darkTheme: ThemeData.dark(),
+        theme: ThemeData(
+            visualDensity: VisualDensity.adaptivePlatformDensity,
+            primaryColor: Color(0xff253a4b),
+            accentColor: Color(0xfff23b5f)),
+        themeMode: ThemeMode.system,
+        debugShowCheckedModeBanner: false,
+        routes: <String, WidgetBuilder>{
+          '/home': (BuildContext context) => TakePictureScreen(),
+          '/root': (BuildContext context) => RootPage(),
+        },
+        //ThemeData(
+        // This is the theme of your application.
+        //
+        // Try running your application with "flutter run". You'll see the
+        // application has a blue toolbar. Then, without quitting the app, try
+        // changing the primarySwatch below to Colors.green and then invoke
+        // "hot reload" (press "r" in the console where you ran "flutter run",
+        // or simply save your changes to "hot reload" in a Flutter IDE).
+        // Notice that the counter didn't reset back to zero; the application
+        // is not restarted.
+        //primarySwatch: Colors.blueGrey,
+        // This makes the visual density adapt to the platform that you run
+        // the app on. For desktop platforms, the controls will be smaller and
+        // closer together (more dense) than on mobile platforms.
+        //visualDensity: VisualDensity.adaptivePlatformDensity,
+        //),
+        home: StreamBuilder(
+          stream: FirebaseAuth.instance.onAuthStateChanged,
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return TakePictureScreen();
+            }
+            return RootPage();
+          },
+        )
+        //TakePictureScreen(
+        // Pass the appropriate camera to the TakePictureScreen widget
+        //),
+        );
   }
 }
 
@@ -86,8 +100,8 @@ class _TakePictureScreenState extends State<TakePictureScreen> {
   String imagePath;
   File _image;
   final _scaffoldKeyCam = GlobalKey<ScaffoldState>();
-  bool _hasFlashlight = false;
-  bool _flashlightON = false;
+  //bool _hasFlashlight = false;
+  //bool _flashlightON = false;
   StreamSubscription connectivitySubscription;
   ConnectivityResult _previousResult;
 
@@ -111,7 +125,7 @@ class _TakePictureScreenState extends State<TakePictureScreen> {
       setState(() {});
     });
 
-    initFlashlight();
+    //initFlashlight();
 
     connectivitySubscription = Connectivity()
         .onConnectivityChanged
@@ -160,19 +174,19 @@ class _TakePictureScreenState extends State<TakePictureScreen> {
     super.dispose();
   }
 
-  initFlashlight() async {
-    bool hasFlash = await Flashlight.hasFlashlight;
-    setState(() {
-      _hasFlashlight = hasFlash;
-    });
-  }
+  //initFlashlight() async {
+  //bool hasFlash = await Flashlight.hasFlashlight;
+  //setState(() {
+  //_hasFlashlight = hasFlash;
+  //});
+  //}
 
-  Future<void> lightOnOff() async {
-    _flashlightON ? await Flashlight.lightOff() : await Flashlight.lightOn();
-    setState(() {
-      _flashlightON = !_flashlightON;
-    });
-  }
+  //Future<void> lightOnOff() async {
+  //_flashlightON ? await Flashlight.lightOff() : await Flashlight.lightOn();
+  //setState(() {
+  //_flashlightON = !_flashlightON;
+  //});
+  //}
 
   Future<void> getImage() async {
     var image = await ImagePicker.pickImage(source: ImageSource.gallery);
@@ -229,6 +243,13 @@ class _TakePictureScreenState extends State<TakePictureScreen> {
         appBar: AppBar(
           title: Text('Wiki App'),
           actions: <Widget>[
+            IconButton(
+              icon: Icon(
+                Icons.lock_open,
+                color: const Color(0xfff23b5f),
+              ),
+              onPressed: () => FirebaseAuth.instance.signOut(),
+            ),
             OpenContainer(
               closedColor:
                   MediaQuery.platformBrightnessOf(context) == Brightness.dark
@@ -239,8 +260,11 @@ class _TakePictureScreenState extends State<TakePictureScreen> {
                       ? Colors.white
                       : Colors.grey[900],
               transitionType: ContainerTransitionType.fadeThrough,
-              closedBuilder: (context, action) =>
-                  IconButton(icon: Icon(Icons.account_circle), onPressed: action, color: Color(0xfff23b5f),),
+              closedBuilder: (context, action) => IconButton(
+                icon: Icon(Icons.account_circle),
+                onPressed: action,
+                color: Color(0xfff23b5f),
+              ),
               openBuilder: (context, action) => SafeArea(
                   child: DataTable(
                 columns: const <DataColumn>[
@@ -301,7 +325,7 @@ class _TakePictureScreenState extends State<TakePictureScreen> {
             OpenContainer(
                 closedShape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30.0)),
-                transitionDuration: Duration(milliseconds: 500),
+                transitionDuration: Duration(milliseconds: 300),
                 tappable: false,
                 closedBuilder: (context, action) {
                   return FloatingActionButton(
@@ -479,7 +503,7 @@ displayData(String textEditingController) {
       }
       if (snapshot.connectionState == ConnectionState.waiting) {
         return LinearProgressIndicator(
-          backgroundColor: Colors.amber,
+          backgroundColor: const Color(0xff253a4b),
         );
       }
     },
