@@ -59,9 +59,8 @@ class _LoginPageState extends State<LoginPage> {
       });
       _formKey.currentState.save();
       try {
-        AuthResult result = await _auth
-            .signInWithEmailAndPassword(email: _email, password: _password)
-            .timeout(Duration(seconds: 10));
+        AuthResult result = await _auth.signInWithEmailAndPassword(
+            email: _email, password: _password);
         FirebaseUser user = result.user;
         _error = 'Welcome back,' + user.displayName.toString() + '!';
         Navigator.of(context).pop();

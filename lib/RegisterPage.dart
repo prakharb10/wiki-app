@@ -60,9 +60,8 @@ class _RegisterPageState extends State<RegisterPage> {
       });
       _formKey.currentState.save();
       try {
-        AuthResult result = await _firebaseAuth
-            .createUserWithEmailAndPassword(email: _email, password: _password)
-            .timeout(Duration(seconds: 10));
+        AuthResult result = await _firebaseAuth.createUserWithEmailAndPassword(
+            email: _email, password: _password);
         FirebaseUser firebaseUser = result.user;
         UserUpdateInfo updateInfo = UserUpdateInfo();
         updateInfo.displayName = _name;
