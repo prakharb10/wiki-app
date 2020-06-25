@@ -8,6 +8,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'ForgotPass.dart';
 import 'RegisterPage.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -62,6 +63,7 @@ class _LoginPageState extends State<LoginPage> {
         AuthResult result = await _auth.signInWithEmailAndPassword(
             email: _email, password: _password);
         FirebaseUser user = result.user;
+        FirebaseAnalytics().logLogin(loginMethod: 'EmailAndPassword');
         _error = 'Welcome back,' + user.displayName.toString() + '!';
         Navigator.of(context).pop();
         //Navigator.of(context).pushReplacementNamed('/home');

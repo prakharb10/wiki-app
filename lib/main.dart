@@ -1,3 +1,4 @@
+import 'package:firebase_analytics/observer.dart';
 import 'package:flushbar/flushbar_route.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
@@ -17,6 +18,7 @@ import 'package:connectivity/connectivity.dart';
 import 'RootPage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 
 List<CameraDescription> cameras;
 Future<void> main() async {
@@ -35,7 +37,9 @@ Future<void> main() async {
 
   Crashlytics.instance.enableInDevMode = true;
   FlutterError.onError = Crashlytics.instance.recordFlutterError;
-  
+
+  await FirebaseAnalytics().logAppOpen();
+
   runApp(MyApp());
 
   // Get a specific camera from the list of available cameras.
@@ -51,6 +55,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+        navigatorObservers: [
+          FirebaseAnalyticsObserver(analytics: FirebaseAnalytics())
+        ],
         navigatorKey: nav,
         darkTheme: ThemeData.dark(),
         theme: ThemeData(
@@ -473,6 +480,7 @@ String jsonEncoded;
 String jsonDecoded;
 
 Future<String> getData(String textController) async {
+  FirebaseAnalytics().logSearch(searchTerm: textController);
   try {
     query = {"find": textController};
     jsonEncoded = json.encode(query);
@@ -490,6 +498,7 @@ displayData(String textEditingController) {
     future: getData(textEditingController),
     builder: (context, snapshot) {
       if (snapshot.hasData) {
+        FirebaseAnalytics().logViewSearchResults(searchTerm: textEditingController);
         return Scaffold(
           body: Padding(
             padding: const EdgeInsets.all(8.0),
