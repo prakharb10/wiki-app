@@ -150,9 +150,7 @@ class _ForgotPassState extends State<ForgotPass> {
                             });
                             _formKey2.currentState.save();
                             try {
-                              await _auth
-                                  .sendPasswordResetEmail(email: _email)
-                                  .timeout(Duration(seconds: 10));
+                              await _auth.sendPasswordResetEmail(email: _email);
                             } on PlatformException catch (error) {
                               switch (error.code) {
                                 case 'ERROR_INVALID_EMAIL':
