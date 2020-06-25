@@ -16,6 +16,7 @@ import 'package:flushbar/flushbar.dart';
 import 'package:connectivity/connectivity.dart';
 import 'RootPage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 
 List<CameraDescription> cameras;
 Future<void> main() async {
@@ -31,6 +32,10 @@ Future<void> main() async {
   } on CameraException catch (e) {
     logError(e.code, e.description);
   }
+
+  Crashlytics.instance.enableInDevMode = true;
+  FlutterError.onError = Crashlytics.instance.recordFlutterError;
+  
   runApp(MyApp());
 
   // Get a specific camera from the list of available cameras.
