@@ -1,3 +1,4 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'SharedAxisPR.dart';
@@ -67,6 +68,7 @@ class _RegisterPageState extends State<RegisterPage> {
         updateInfo.displayName = _name;
         firebaseUser.updateProfile(updateInfo);
         _error = 'Hi, $_name!';
+        FirebaseAnalytics().logSignUp(signUpMethod: 'EmailAndPassword');
         Navigator.of(context).pop();
         //Navigator.of(context).pushNamed('/home');
       } on PlatformException catch (err) {
