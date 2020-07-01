@@ -205,7 +205,6 @@ class _LoginPageState extends State<LoginPage> {
                         focusNode: _focusNodePass,
                         controller: _passController,
                         obscureText: _isObscured,
-                        validator: validatePassword,
                         maxLines: 1,
                         autovalidate: false,
                         enableSuggestions: false,
