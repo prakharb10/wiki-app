@@ -64,6 +64,7 @@ class _LoginPageState extends State<LoginPage> {
             email: _email, password: _password);
         FirebaseUser user = result.user;
         FirebaseAnalytics().logLogin(loginMethod: 'EmailAndPassword');
+        FirebaseAnalytics().setUserId(user.uid);
         _error = 'Welcome back,' + user.displayName.toString() + '!';
         Navigator.of(context).pop();
         //Navigator.of(context).pushReplacementNamed('/home');

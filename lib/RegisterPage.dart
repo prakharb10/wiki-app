@@ -69,6 +69,7 @@ class _RegisterPageState extends State<RegisterPage> {
         firebaseUser.updateProfile(updateInfo);
         _error = 'Hi, $_name!';
         FirebaseAnalytics().logSignUp(signUpMethod: 'EmailAndPassword');
+        FirebaseAnalytics().setUserId(firebaseUser.uid);
         Navigator.of(context).pop();
         //Navigator.of(context).pushNamed('/home');
       } on PlatformException catch (err) {
