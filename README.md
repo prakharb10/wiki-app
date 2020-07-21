@@ -1,6 +1,6 @@
 # wiki_app
 
-A new Flutter project.
+A wiki app.
 
 ## Getting Started
 
