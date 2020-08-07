@@ -135,191 +135,196 @@ class _RegisterPageState extends State<RegisterPage> {
                 ),
                 textAlign: TextAlign.left,
               ),
-              Form(
-                autovalidate: _autoValidate,
-                key: _formKey,
-                child: Column(
-                  children: <Widget>[
-                    Padding(
-                      padding:
-                          const EdgeInsets.fromLTRB(20.0, 25.0, 20.0, 10.0),
-                      child: TextFormField(
-                        focusNode: _focusNodeName,
-                        controller: _nameController,
-                        validator: (value) {
-                          if (value.length < 3) {
-                            return "Name too short";
-                          } else {
-                            return null;
-                          }
-                        },
-                        obscureText: false,
-                        maxLines: 1,
-                        autovalidate: false,
-                        enableSuggestions: true,
-                        toolbarOptions:
-                            ToolbarOptions(paste: true, selectAll: true),
-                        textCapitalization: TextCapitalization.words,
-                        cursorColor: const Color(0xff253a4b),
-                        keyboardType: TextInputType.text,
-                        decoration: InputDecoration(
-                          filled: true,
-                          border: OutlineInputBorder(
-                            borderSide: BorderSide.none,
-                            borderRadius: BorderRadius.circular(25.0),
+              AutofillGroup(
+                child: Form(
+                  autovalidate: _autoValidate,
+                  key: _formKey,
+                  child: Column(
+                    children: <Widget>[
+                      Padding(
+                        padding:
+                            const EdgeInsets.fromLTRB(20.0, 25.0, 20.0, 10.0),
+                        child: TextFormField(
+                          autofillHints: [AutofillHints.name],
+                          focusNode: _focusNodeName,
+                          controller: _nameController,
+                          validator: (value) {
+                            if (value.length < 3) {
+                              return "Name too short";
+                            } else {
+                              return null;
+                            }
+                          },
+                          obscureText: false,
+                          maxLines: 1,
+                          autovalidate: false,
+                          enableSuggestions: true,
+                          toolbarOptions:
+                              ToolbarOptions(paste: true, selectAll: true),
+                          textCapitalization: TextCapitalization.words,
+                          cursorColor: const Color(0xff253a4b),
+                          keyboardType: TextInputType.text,
+                          decoration: InputDecoration(
+                            filled: true,
+                            border: OutlineInputBorder(
+                              borderSide: BorderSide.none,
+                              borderRadius: BorderRadius.circular(25.0),
+                            ),
+                            fillColor: const Color(0x25253a4b),
+                            hintText: 'Name',
+                            prefixIcon: Icon(
+                              Icons.person_outline,
+                              color: const Color(0xfff23b5f),
+                            ),
+                            suffixIcon: _sufIC(_focusNodeName),
                           ),
-                          fillColor: const Color(0x25253a4b),
-                          hintText: 'Name',
-                          prefixIcon: Icon(
-                            Icons.person_outline,
-                            color: const Color(0xfff23b5f),
-                          ),
-                          suffixIcon: _sufIC(_focusNodeName),
+                          textInputAction: TextInputAction.next,
+                          onFieldSubmitted: (value) => FocusScope.of(context)
+                              .requestFocus(_focusNodeEmail),
+                          onChanged: (value) {
+                            setState(() {
+                              _nameController.text.isEmpty
+                                  ? _isEmpty = true
+                                  : _isEmpty = false;
+                            });
+                          },
+                          onTap: () {
+                            setState(() {
+                              _nameController.text.isEmpty
+                                  ? _isEmpty = true
+                                  : _isEmpty = false;
+                            });
+                          },
+                          onEditingComplete: () {
+                            setState(() {
+                              _nameController.text.isEmpty
+                                  ? _isEmpty = true
+                                  : _isEmpty = false;
+                            });
+                          },
+                          onSaved: (newValue) => _name = newValue,
                         ),
-                        textInputAction: TextInputAction.next,
-                        onFieldSubmitted: (value) => FocusScope.of(context)
-                            .requestFocus(_focusNodeEmail),
-                        onChanged: (value) {
-                          setState(() {
-                            _nameController.text.isEmpty
-                                ? _isEmpty = true
-                                : _isEmpty = false;
-                          });
-                        },
-                        onTap: () {
-                          setState(() {
-                            _nameController.text.isEmpty
-                                ? _isEmpty = true
-                                : _isEmpty = false;
-                          });
-                        },
-                        onEditingComplete: () {
-                          setState(() {
-                            _nameController.text.isEmpty
-                                ? _isEmpty = true
-                                : _isEmpty = false;
-                          });
-                        },
-                        onSaved: (newValue) => _name = newValue,
                       ),
-                    ),
-                    Padding(
-                      padding:
-                          const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-                      child: TextFormField(
-                        focusNode: _focusNodeEmail,
-                        controller: _emailController,
-                        validator: validateEmail,
-                        obscureText: false,
-                        maxLines: 1,
-                        autovalidate: false,
-                        enableSuggestions: true,
-                        toolbarOptions:
-                            ToolbarOptions(paste: true, selectAll: true),
-                        textCapitalization: TextCapitalization.none,
-                        cursorColor: const Color(0xff253a4b),
-                        keyboardType: TextInputType.emailAddress,
-                        decoration: InputDecoration(
-                          filled: true,
-                          border: OutlineInputBorder(
-                            borderSide: BorderSide.none,
-                            borderRadius: BorderRadius.circular(25.0),
+                      Padding(
+                        padding:
+                            const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+                        child: TextFormField(
+                          autofillHints: [AutofillHints.email],
+                          focusNode: _focusNodeEmail,
+                          controller: _emailController,
+                          validator: validateEmail,
+                          obscureText: false,
+                          maxLines: 1,
+                          autovalidate: false,
+                          enableSuggestions: true,
+                          toolbarOptions:
+                              ToolbarOptions(paste: true, selectAll: true),
+                          textCapitalization: TextCapitalization.none,
+                          cursorColor: const Color(0xff253a4b),
+                          keyboardType: TextInputType.emailAddress,
+                          decoration: InputDecoration(
+                            filled: true,
+                            border: OutlineInputBorder(
+                              borderSide: BorderSide.none,
+                              borderRadius: BorderRadius.circular(25.0),
+                            ),
+                            fillColor: const Color(0x25253a4b),
+                            hintText: 'Email',
+                            prefixIcon: Icon(
+                              Icons.email,
+                              color: const Color(0xfff23b5f),
+                            ),
+                            suffixIcon: _sufIC(_focusNodeEmail),
                           ),
-                          fillColor: const Color(0x25253a4b),
-                          hintText: 'Email',
-                          prefixIcon: Icon(
-                            Icons.email,
-                            color: const Color(0xfff23b5f),
-                          ),
-                          suffixIcon: _sufIC(_focusNodeEmail),
+                          textInputAction: TextInputAction.next,
+                          onFieldSubmitted: (value) => FocusScope.of(context)
+                              .requestFocus(_focusNodePass),
+                          onChanged: (value) {
+                            setState(() {
+                              _emailController.text.isEmpty
+                                  ? _isEmpty = true
+                                  : _isEmpty = false;
+                            });
+                          },
+                          onTap: () {
+                            setState(() {
+                              _emailController.text.isEmpty
+                                  ? _isEmpty = true
+                                  : _isEmpty = false;
+                            });
+                          },
+                          onEditingComplete: () {
+                            setState(() {
+                              _emailController.text.isEmpty
+                                  ? _isEmpty = true
+                                  : _isEmpty = false;
+                            });
+                          },
+                          onSaved: (newValue) => _email = newValue,
                         ),
-                        textInputAction: TextInputAction.next,
-                        onFieldSubmitted: (value) =>
-                            FocusScope.of(context).requestFocus(_focusNodePass),
-                        onChanged: (value) {
-                          setState(() {
-                            _emailController.text.isEmpty
-                                ? _isEmpty = true
-                                : _isEmpty = false;
-                          });
-                        },
-                        onTap: () {
-                          setState(() {
-                            _emailController.text.isEmpty
-                                ? _isEmpty = true
-                                : _isEmpty = false;
-                          });
-                        },
-                        onEditingComplete: () {
-                          setState(() {
-                            _emailController.text.isEmpty
-                                ? _isEmpty = true
-                                : _isEmpty = false;
-                          });
-                        },
-                        onSaved: (newValue) => _email = newValue,
                       ),
-                    ),
-                    Padding(
-                      padding:
-                          const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-                      child: TextFormField(
-                        focusNode: _focusNodePass,
-                        controller: _passController,
-                        obscureText: _isObscured,
-                        validator: validatePassword,
-                        maxLines: 1,
-                        autovalidate: false,
-                        enableSuggestions: false,
-                        toolbarOptions: ToolbarOptions(
-                          paste: false,
-                          selectAll: true,
-                          copy: false,
-                          cut: false,
-                        ),
-                        textCapitalization: TextCapitalization.none,
-                        cursorColor: const Color(0xff253a4b),
-                        keyboardType: TextInputType.visiblePassword,
-                        decoration: InputDecoration(
-                          filled: true,
-                          border: OutlineInputBorder(
-                            borderSide: BorderSide.none,
-                            borderRadius: BorderRadius.circular(25.0),
+                      Padding(
+                        padding:
+                            const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+                        child: TextFormField(
+                          autofillHints: [AutofillHints.newPassword],
+                          focusNode: _focusNodePass,
+                          controller: _passController,
+                          obscureText: _isObscured,
+                          validator: validatePassword,
+                          maxLines: 1,
+                          autovalidate: false,
+                          enableSuggestions: false,
+                          toolbarOptions: ToolbarOptions(
+                            paste: false,
+                            selectAll: true,
+                            copy: false,
+                            cut: false,
                           ),
-                          fillColor: const Color(0x25253a4b),
-                          hintText: 'Password',
-                          prefixIcon: Icon(
-                            Icons.lock,
-                            color: const Color(0xfff23b5f),
+                          textCapitalization: TextCapitalization.none,
+                          cursorColor: const Color(0xff253a4b),
+                          keyboardType: TextInputType.visiblePassword,
+                          decoration: InputDecoration(
+                            filled: true,
+                            border: OutlineInputBorder(
+                              borderSide: BorderSide.none,
+                              borderRadius: BorderRadius.circular(25.0),
+                            ),
+                            fillColor: const Color(0x25253a4b),
+                            hintText: 'Password',
+                            prefixIcon: Icon(
+                              Icons.lock,
+                              color: const Color(0xfff23b5f),
+                            ),
+                            suffixIcon: _isFilled
+                                ? IconButton(
+                                    icon: Icon(
+                                      _isObscured
+                                          ? Icons.visibility_off
+                                          : Icons.visibility,
+                                      color: const Color(0xfff23b5f),
+                                    ),
+                                    onPressed: () {
+                                      setState(() {
+                                        _isObscured = !_isObscured;
+                                      });
+                                    },
+                                  )
+                                : null,
                           ),
-                          suffixIcon: _isFilled
-                              ? IconButton(
-                                  icon: Icon(
-                                    _isObscured
-                                        ? Icons.visibility_off
-                                        : Icons.visibility,
-                                    color: const Color(0xfff23b5f),
-                                  ),
-                                  onPressed: () {
-                                    setState(() {
-                                      _isObscured = !_isObscured;
-                                    });
-                                  },
-                                )
-                              : null,
+                          textInputAction: TextInputAction.done,
+                          onChanged: (value) {
+                            setState(() {
+                              _passController.text.isEmpty
+                                  ? _isFilled = false
+                                  : _isFilled = true;
+                            });
+                          },
+                          onSaved: (value) => _password = value,
                         ),
-                        textInputAction: TextInputAction.done,
-                        onChanged: (value) {
-                          setState(() {
-                            _passController.text.isEmpty
-                                ? _isFilled = false
-                                : _isFilled = true;
-                          });
-                        },
-                        onSaved: (value) => _password = value,
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
               Padding(

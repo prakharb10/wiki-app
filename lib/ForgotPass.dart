@@ -83,6 +83,7 @@ class _ForgotPassState extends State<ForgotPass> {
                     autovalidate: true,
                     key: _formKey2,
                     child: TextFormField(
+                      autofillHints: [AutofillHints.email],
                       validator: validateEmail,
                       focusNode: _focusNodeEmail2,
                       controller: _forgotemailController,
