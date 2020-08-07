@@ -12,13 +12,13 @@ import 'package:image_picker/image_picker.dart';
 import 'package:firebase_ml_vision/firebase_ml_vision.dart';
 import 'package:animations/animations.dart';
 import 'package:gallery_saver/gallery_saver.dart';
-//import 'package:flashlight/flashlight.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:connectivity/connectivity.dart';
 import 'RootPage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 List<CameraDescription> cameras;
 Future<void> main() async {
@@ -186,20 +186,6 @@ class _TakePictureScreenState extends State<TakePictureScreen> {
     super.dispose();
   }
 
-  //initFlashlight() async {
-  //bool hasFlash = await Flashlight.hasFlashlight;
-  //setState(() {
-  //_hasFlashlight = hasFlash;
-  //});
-  //}
-
-  //Future<void> lightOnOff() async {
-  //_flashlightON ? await Flashlight.lightOff() : await Flashlight.lightOn();
-  //setState(() {
-  //_flashlightON = !_flashlightON;
-  //});
-  //}
-
   Future<void> getImage() async {
     var image = await ImagePicker.pickImage(source: ImageSource.gallery);
     setState(() {
@@ -297,9 +283,6 @@ class _TakePictureScreenState extends State<TakePictureScreen> {
                 dataRowHeight: 100.0,
               )),
             )
-            //IconButton(
-            //  icon: Icon(_flashlightON ? Icons.flash_on : Icons.flash_off),
-            //onPressed: () => lightOnOff())
           ],
         ),
         key: _scaffoldKeyCam,
@@ -478,15 +461,18 @@ class _TakePictureScreenState extends State<TakePictureScreen> {
 Map query;
 String jsonEncoded;
 String jsonDecoded;
+String link;
 
 Future<String> getData(String textController) async {
   FirebaseAnalytics().logSearch(searchTerm: textController);
   try {
     query = {"find": textController};
     jsonEncoded = json.encode(query);
-    Response response =
-        await Dio().post('http://167.71.226.206/request', data: jsonEncoded);
-    jsonDecoded = response.data;
+    Response response = await Dio().post(
+        'http://prakharb10.pythonanywhere.com/request',
+        data: jsonEncoded);
+    jsonDecoded = response.data['result'];
+    link = response.data['url'];
   } on DioError catch (e) {
     jsonDecoded = e.toString();
   }
@@ -498,14 +484,39 @@ displayData(String textEditingController) {
     future: getData(textEditingController),
     builder: (context, snapshot) {
       if (snapshot.hasData) {
-        FirebaseAnalytics().logViewSearchResults(searchTerm: textEditingController);
+        FirebaseAnalytics()
+            .logViewSearchResults(searchTerm: textEditingController);
         return Scaffold(
           body: Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.only(left: 8,right: 8,top: 8,),
             child: ListView(
               physics: BouncingScrollPhysics(),
               children: <Widget>[
-                Text(snapshot.data, style: GoogleFonts.roboto(fontSize: 20.0))
+                Text(snapshot.data, style: GoogleFonts.roboto(fontSize: 20.0)),
+                FlatButton(
+                  onPressed: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (BuildContext context) => SafeArea(
+                          child: Scaffold(
+                            //appBar: AppBar(),
+                            body: WebView(
+                              initialUrl: link,
+                            ),
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                  child: Text(
+                    'Read More...',
+                    style: TextStyle(
+                      color: Color(0xfff23b5f),
+                      fontSize: 20.0,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ),
               ],
             ),
           ),
