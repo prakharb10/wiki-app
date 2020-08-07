@@ -362,7 +362,7 @@ String validatePassword(String value) {
     return 'Please enter password';
   } else {
     if (!regex.hasMatch(value))
-      return 'Enter valid password';
+      return 'Your password must have an uppercase, a lowercase, a numeric and a special character';
     else
       return null;
   }
