@@ -12,7 +12,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:firebase_ml_vision/firebase_ml_vision.dart';
 import 'package:animations/animations.dart';
 import 'package:gallery_saver/gallery_saver.dart';
-//import 'package:flashlight/flashlight.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:connectivity/connectivity.dart';
 import 'RootPage.dart';
@@ -187,20 +186,6 @@ class _TakePictureScreenState extends State<TakePictureScreen> {
     super.dispose();
   }
 
-  //initFlashlight() async {
-  //bool hasFlash = await Flashlight.hasFlashlight;
-  //setState(() {
-  //_hasFlashlight = hasFlash;
-  //});
-  //}
-
-  //Future<void> lightOnOff() async {
-  //_flashlightON ? await Flashlight.lightOff() : await Flashlight.lightOn();
-  //setState(() {
-  //_flashlightON = !_flashlightON;
-  //});
-  //}
-
   Future<void> getImage() async {
     var image = await ImagePicker.pickImage(source: ImageSource.gallery);
     setState(() {
@@ -298,9 +283,6 @@ class _TakePictureScreenState extends State<TakePictureScreen> {
                 dataRowHeight: 100.0,
               )),
             )
-            //IconButton(
-            //  icon: Icon(_flashlightON ? Icons.flash_on : Icons.flash_off),
-            //onPressed: () => lightOnOff())
           ],
         ),
         key: _scaffoldKeyCam,
