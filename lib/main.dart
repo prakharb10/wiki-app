@@ -569,6 +569,7 @@ class _TextSearchPageState extends State<TextSearchPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             TextFormField(
+              textCapitalization: TextCapitalization.sentences,
               controller: _myController,
               decoration: InputDecoration(
                 hintText: 'Enter your search query',
