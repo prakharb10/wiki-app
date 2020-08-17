@@ -255,6 +255,42 @@ class _TakePictureScreenState extends State<TakePictureScreen> {
     return finalList;
   }
 
+  void _logoutDialog() {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('Do you want to Logout?'),
+          actions: <Widget>[
+            FlatButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text(
+                'No',
+                style: TextStyle(
+                  color: Color(0xff253a4b),
+                ),
+              ),
+            ),
+            FlatButton(
+              onPressed: () {
+                FirebaseAuth.instance.signOut();
+                Navigator.of(context).pop();
+              },
+              child: Text(
+                'Yes',
+                style: TextStyle(
+                  color: Color(0xfff23b5f),
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -267,7 +303,7 @@ class _TakePictureScreenState extends State<TakePictureScreen> {
                 Icons.lock_open,
                 color: const Color(0xfff23b5f),
               ),
-              onPressed: () => FirebaseAuth.instance.signOut(),
+              onPressed: () => _logoutDialog(),
             ),
             OpenContainer(
               closedColor:
