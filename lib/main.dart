@@ -324,17 +324,23 @@ class _TakePictureScreenState extends State<TakePictureScreen> {
                   child: DataTable(
                 columns: const <DataColumn>[
                   DataColumn(
-                      label: Text(
-                    'Image',
-                    style:
-                        TextStyle(fontWeight: FontWeight.w800, fontSize: 20.0),
-                  )),
+                    label: Text(
+                      'Image',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w800,
+                        fontSize: 20.0,
+                      ),
+                    ),
+                  ),
                   DataColumn(
-                      label: Text(
-                    'Label',
-                    style:
-                        TextStyle(fontWeight: FontWeight.w800, fontSize: 20.0),
-                  ))
+                    label: Text(
+                      'Label',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w800,
+                        fontSize: 20.0,
+                      ),
+                    ),
+                  )
                 ],
                 rows: historyItems(),
                 dataRowHeight: 100.0,
@@ -375,19 +381,21 @@ class _TakePictureScreenState extends State<TakePictureScreen> {
                   : null,
             ),
             OpenContainer(
-                closedShape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30.0)),
-                transitionDuration: Duration(milliseconds: 300),
-                tappable: false,
-                closedBuilder: (context, action) {
-                  return FloatingActionButton(
-                    onPressed: () => action(),
-                    child: Icon(Icons.search),
-                  );
-                },
-                openBuilder: (context, action) {
-                  return TextSearchPage();
-                })
+              closedShape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(30.0),
+              ),
+              transitionDuration: Duration(milliseconds: 300),
+              tappable: false,
+              closedBuilder: (context, action) {
+                return FloatingActionButton(
+                  onPressed: () => action(),
+                  child: Icon(Icons.search),
+                );
+              },
+              openBuilder: (context, action) {
+                return TextSearchPage();
+              },
+            )
           ],
         ),
       ),
@@ -397,7 +405,11 @@ class _TakePictureScreenState extends State<TakePictureScreen> {
   String timestamp() => DateTime.now().millisecondsSinceEpoch.toString();
 
   void showInSnackBar(String message) {
-    _scaffoldKeyCam.currentState.showSnackBar(SnackBar(content: Text(message)));
+    _scaffoldKeyCam.currentState.showSnackBar(
+      SnackBar(
+        content: Text(message),
+      ),
+    );
   }
 
   Widget _cameraPreviewWidget() {
@@ -419,17 +431,21 @@ class _TakePictureScreenState extends State<TakePictureScreen> {
   }
 
   void onTakePictureButtonPressed() {
-    takePicture().then((String filePath) {
-      if (mounted) {
-        setState(() {
-          imagePath = filePath;
-        });
-        if (filePath != null) {
-          GallerySaver.saveImage(imagePath, albumName: "Wiki App");
-          detectLabels().then((_) {});
+    takePicture().then(
+      (String filePath) {
+        if (mounted) {
+          setState(
+            () {
+              imagePath = filePath;
+            },
+          );
+          if (filePath != null) {
+            GallerySaver.saveImage(imagePath, albumName: "Wiki App");
+            detectLabels().then((_) {});
+          }
         }
-      }
-    });
+      },
+    );
   }
 
   Future<String> takePicture() async {
@@ -475,8 +491,9 @@ class _TakePictureScreenState extends State<TakePictureScreen> {
 
     await showModal(
       configuration: FadeScaleTransitionConfiguration(
-          transitionDuration: Duration(milliseconds: 500),
-          reverseTransitionDuration: Duration(milliseconds: 300)),
+        transitionDuration: Duration(milliseconds: 500),
+        reverseTransitionDuration: Duration(milliseconds: 300),
+      ),
       context: context,
       builder: (context) {
         return SimpleDialog(
@@ -485,21 +502,23 @@ class _TakePictureScreenState extends State<TakePictureScreen> {
             Container(
               width: double.maxFinite,
               child: ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: labelTexts.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return ListTile(
-                        title: Text(labelTexts[index]),
-                        onTap: () {
-                          labelData['$imagePath'] = labelTexts[index];
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    displayData(labelTexts[index]),
-                              ));
-                        });
-                  }),
+                shrinkWrap: true,
+                itemCount: labelTexts.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return ListTile(
+                    title: Text(labelTexts[index]),
+                    onTap: () {
+                      labelData['$imagePath'] = labelTexts[index];
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => displayData(labelTexts[index]),
+                        ),
+                      );
+                    },
+                  );
+                },
+              ),
             )
           ],
         );
@@ -662,16 +681,21 @@ class _TextSearchPageState extends State<TextSearchPage> {
               onFieldSubmitted: (value) => {
                 if (_myController.text.isEmpty)
                   {
-                    _scaffoldKey.currentState.showSnackBar(SnackBar(
-                        content: Text('Search query cannot be empty!')))
+                    _scaffoldKey.currentState.showSnackBar(
+                      SnackBar(
+                        content: Text('Search query cannot be empty!'),
+                      ),
+                    )
                   }
                 else
                   {
                     Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                displayData(_myController.text.toString())))
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            displayData(_myController.text.toString()),
+                      ),
+                    )
                   }
               },
               onChanged: (value) {
