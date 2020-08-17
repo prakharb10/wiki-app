@@ -110,7 +110,6 @@ class TakePictureScreen extends StatefulWidget {
 class _TakePictureScreenState extends State<TakePictureScreen> {
   CameraController _controller;
   String imagePath;
-  File _image;
   final _scaffoldKeyCam = GlobalKey<ScaffoldState>();
   //bool _hasFlashlight = false;
   //bool _flashlightON = false;
@@ -143,11 +142,14 @@ class _TakePictureScreenState extends State<TakePictureScreen> {
         .onConnectivityChanged
         .listen((ConnectivityResult connectivityResult) {
       if (connectivityResult == ConnectivityResult.none) {
-        nav.currentState.push(showFlushbar(
+        nav.currentState.push(
+          showFlushbar(
             context: context,
             flushbar: Flushbar(
-              titleText:
-                  Text('No internet', style: TextStyle(color: Colors.white)),
+              titleText: Text(
+                'No internet',
+                style: TextStyle(color: Colors.white),
+              ),
               flushbarPosition: FlushbarPosition.TOP,
               message: 'Check your Connection',
               isDismissible: false,
@@ -159,10 +161,13 @@ class _TakePictureScreenState extends State<TakePictureScreen> {
               ),
               blockBackgroundInteraction: true,
               reverseAnimationCurve: Curves.easeOutBack,
-            )));
+            ),
+          ),
+        );
       } else if (_previousResult == ConnectivityResult.none) {
         nav.currentState.pop();
-        nav.currentState.push(showFlushbar(
+        nav.currentState.push(
+          showFlushbar(
             context: context,
             flushbar: Flushbar(
               titleText: Text('Back Online'),
@@ -171,7 +176,9 @@ class _TakePictureScreenState extends State<TakePictureScreen> {
               backgroundColor: Colors.green,
               duration: Duration(seconds: 4),
               forwardAnimationCurve: Curves.easeInSine,
-            )));
+            ),
+          ),
+        );
       }
 
       _previousResult = connectivityResult;
@@ -187,9 +194,8 @@ class _TakePictureScreenState extends State<TakePictureScreen> {
   }
 
   Future<void> getImage() async {
-    var image = await ImagePicker.pickImage(source: ImageSource.gallery);
+    var image = await ImagePicker().getImage(source: ImageSource.gallery);
     setState(() {
-      _image = image;
       imagePath = image.path;
     });
     detectLabels();
@@ -203,32 +209,47 @@ class _TakePictureScreenState extends State<TakePictureScreen> {
       finalList = [];
     } else {
       for (var item = labelList.length - 1; item >= 0; item--) {
-        finalList.add(DataRow(cells: <DataCell>[
-          DataCell(
-            Image.file(File(imgList[item])),
-            onTap: () {
-              showModal(
-                context: context,
-                configuration: FadeScaleTransitionConfiguration(
-                    transitionDuration: Duration(milliseconds: 400),
-                    reverseTransitionDuration: Duration(milliseconds: 200)),
-                builder: (context) {
-                  return Expanded(child: Image.file(File(imgList[item])));
+        finalList.add(
+          DataRow(
+            cells: <DataCell>[
+              DataCell(
+                Image.file(
+                  File(imgList[item]),
+                ),
+                onTap: () {
+                  showModal(
+                    context: context,
+                    configuration: FadeScaleTransitionConfiguration(
+                      transitionDuration: Duration(milliseconds: 400),
+                      reverseTransitionDuration: Duration(milliseconds: 200),
+                    ),
+                    builder: (context) {
+                      return Expanded(
+                        child: Image.file(
+                          File(
+                            imgList[item],
+                          ),
+                        ),
+                      );
+                    },
+                  );
                 },
-              );
-            },
-          ),
-          DataCell(
-              Text(
-                labelList[item],
-                style: TextStyle(fontSize: 18.0),
               ),
-              onTap: () => Navigator.push(
+              DataCell(
+                Text(
+                  labelList[item],
+                  style: TextStyle(fontSize: 18.0),
+                ),
+                onTap: () => Navigator.push(
                   context,
                   MaterialPageRoute(
                     builder: (context) => displayData(labelList[item]),
-                  )))
-        ]));
+                  ),
+                ),
+              )
+            ],
+          ),
+        );
       }
     }
     return finalList;
@@ -488,7 +509,11 @@ displayData(String textEditingController) {
             .logViewSearchResults(searchTerm: textEditingController);
         return Scaffold(
           body: Padding(
-            padding: const EdgeInsets.only(left: 8,right: 8,top: 8,),
+            padding: const EdgeInsets.only(
+              left: 8,
+              right: 8,
+              top: 8,
+            ),
             child: ListView(
               physics: BouncingScrollPhysics(),
               children: <Widget>[
