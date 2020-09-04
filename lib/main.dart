@@ -611,6 +611,9 @@ displayData(String textEditingController) {
           backgroundColor: const Color(0xff253a4b),
         );
       }
+      return Center(
+        child: Text("Error Occurred"),
+      );
     },
   );
 }
