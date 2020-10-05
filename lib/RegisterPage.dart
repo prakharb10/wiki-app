@@ -30,7 +30,7 @@ class _RegisterPageState extends State<RegisterPage> {
   String _password;
   String _name;
   bool _isLoading = false;
-  bool _autoValidate = false;
+  AutovalidateMode _autovalidateMode = AutovalidateMode.disabled;
   String _error = '';
 
   Widget _sufIC(FocusNode focusNode) {
@@ -101,7 +101,7 @@ class _RegisterPageState extends State<RegisterPage> {
       });
     } else {
       setState(() {
-        _autoValidate = true;
+        _autovalidateMode = AutovalidateMode.always;
       });
     }
   }
@@ -137,7 +137,7 @@ class _RegisterPageState extends State<RegisterPage> {
               ),
               AutofillGroup(
                 child: Form(
-                  autovalidate: _autoValidate,
+                  autovalidateMode: _autovalidateMode,
                   key: _formKey,
                   child: Column(
                     children: <Widget>[
@@ -157,7 +157,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           },
                           obscureText: false,
                           maxLines: 1,
-                          autovalidate: false,
+                          autovalidateMode: AutovalidateMode.disabled,
                           enableSuggestions: true,
                           toolbarOptions:
                               ToolbarOptions(paste: true, selectAll: true),
@@ -215,7 +215,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           validator: validateEmail,
                           obscureText: false,
                           maxLines: 1,
-                          autovalidate: false,
+                          autovalidateMode: AutovalidateMode.disabled,
                           enableSuggestions: true,
                           toolbarOptions:
                               ToolbarOptions(paste: true, selectAll: true),
@@ -273,7 +273,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           obscureText: _isObscured,
                           validator: validatePassword,
                           maxLines: 1,
-                          autovalidate: false,
+                          autovalidateMode: AutovalidateMode.disabled,
                           enableSuggestions: false,
                           toolbarOptions: ToolbarOptions(
                             paste: false,
