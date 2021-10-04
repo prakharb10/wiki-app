@@ -29,7 +29,7 @@ class _LoginPageState extends State<LoginPage> {
   String _email;
   String _password;
   bool _isLoading = false;
-  bool _autoValidate = false;
+  AutovalidateMode _autovalidateMode = AutovalidateMode.disabled;
   String _error = '';
 
   Widget _sufIC(FocusNode focusNode) {
@@ -103,7 +103,7 @@ class _LoginPageState extends State<LoginPage> {
       });
     } else {
       setState(() {
-        _autoValidate = true;
+        _autovalidateMode = AutovalidateMode.always;
       });
     }
   }
@@ -139,7 +139,7 @@ class _LoginPageState extends State<LoginPage> {
               ),
               AutofillGroup(
                 child: Form(
-                  autovalidate: _autoValidate,
+                  autovalidateMode: _autovalidateMode,
                   key: _formKey,
                   child: Column(
                     children: <Widget>[
@@ -153,7 +153,7 @@ class _LoginPageState extends State<LoginPage> {
                           validator: validateEmail,
                           obscureText: false,
                           maxLines: 1,
-                          autovalidate: false,
+                          autovalidateMode: AutovalidateMode.disabled,
                           enableSuggestions: true,
                           toolbarOptions:
                               ToolbarOptions(paste: true, selectAll: true),
@@ -210,7 +210,7 @@ class _LoginPageState extends State<LoginPage> {
                           controller: _passController,
                           obscureText: _isObscured,
                           maxLines: 1,
-                          autovalidate: false,
+                          autovalidateMode: AutovalidateMode.disabled,
                           enableSuggestions: false,
                           toolbarOptions: ToolbarOptions(
                             paste: false,

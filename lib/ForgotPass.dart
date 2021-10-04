@@ -80,7 +80,7 @@ class _ForgotPassState extends State<ForgotPass> {
                     bottom: 15,
                   ),
                   child: Form(
-                    autovalidate: true,
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
                     key: _formKey2,
                     child: TextFormField(
                       autofillHints: [AutofillHints.email],
@@ -89,7 +89,7 @@ class _ForgotPassState extends State<ForgotPass> {
                       controller: _forgotemailController,
                       obscureText: false,
                       maxLines: 1,
-                      autovalidate: false,
+                      autovalidateMode: AutovalidateMode.disabled,
                       enableSuggestions: true,
                       toolbarOptions:
                           ToolbarOptions(paste: true, selectAll: true),
